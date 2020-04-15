@@ -1,0 +1,20 @@
+Hier werden Gedanken und Notizen die während der Erstellung
+des Codes angefallen sind, notiert
+
+Ursprünglicher Ansatz um den linken Spieler zu erstellen, der allerdings nichts erzeugt hat
+
+const SpielerLinks = new Object();
+{ SpielerLinks.x = 0;
+  SpielerLinks.y = Hintergrund.height/2;
+  SpielerLinks.width = 10;
+  SpielerLinks.height = 100;
+  SpielerLinks.color = "WHITE";
+
+}
+
+Für den Ball:
+"arc" für Kreise
+"Path" Methode für Wege
+"drawText" für Text -> später für Punktestand
+Math.PI Funktion für die Zahl PI
+Aufbau der arc-Funktion: acr(x-Koordinate, y-Koordinate, Radius, StartWinkel, EndWinkel, "erstellung im Uhrzeigersinn" (ist ein Boolean))

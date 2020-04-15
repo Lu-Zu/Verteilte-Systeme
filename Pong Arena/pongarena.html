@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pong Arena</title>
+</head>
+<canvas id="test" width="600" height="400"></canvas> <!--Stellt Proportionen der Arena dar-->
+
+<script>
+var ctx;
+var canvas;
+var ballXAchse = 50;
+var ballGeschwX = 10;
+var ballYAchse = 50;
+var ballGeschwY = 4;
+var SpielerLinks = 250;
+var SpielerRechts = 250;
+const HoeheFiguren = 100;
+var PunkteLinks = 0;
+var PunkteRechts = 0;
+var Runde = 0;
+
+window.onload = function(){ //window.onload zum vorladen?
+  canvas = document.getElementById("test");
+  ctx = canvas.getContext("2d");
+
+  var WdhRate = 30;
+  setInterval(function() {
+    Bewegung();
+    Erstellung();
+  }, 1000/WdhRate); //1000 steht für 1Sekunde -> Damit = 30 FPS
+
+  canvas.addEventListener("mousemove", //Funktion um die Mausposition zur Steuerung von SpielerLinks verwenden zu können
+function(evt){
+    var KoordinatenMaus = calculateKoordinatenMaus(evt);
+    SpielerLinks = KoordinatenMaus.y;
+});
+
+}
+
+function Anstoss() {
+  ballXAchse = canvas.width/2;
+  ballYAchse = canvas.height/2
+  ballGeschwX = -ballGeschwX;
+}
+
+function Bewegung(){
+  ballXAchse += ballGeschwX;
+  ballYAchse += ballGeschwY;
+
+  if(ballXAchse < 0) {
+    if(ballYAchse > SpielerLinks &&
+      ballYAchse < SpielerLinks + HoeheFiguren) {
+      ballGeschwX = -ballGeschwX;
+    } else {
+    Anstoss();
+    PunkteRechts++;
+    Runde++;
+
+  }
+}
+  if (ballXAchse > canvas.width) {
+    if(ballYAchse > SpielerRechts &&
+      ballYAchse < SpielerRechts + HoeheFiguren) {
+    ballGeschwX = -ballGeschwX;
+  } else {
+    Anstoss();
+    PunkteLinks++;
+    Runde++;
+  }
+}
+  if (ballYAchse < 0) {
+    ballGeschwY = -ballGeschwY; //Ball prallt in die entgegengesetzte Richtung ab
+
+  }
+
+  if (ballYAchse > canvas.height) {
+    ballGeschwY = -ballGeschwY
+
+  }
+}
+
+function Viereck(leftX,topY,width,height,drawColour) { //Funktion um Vierecke zu zeichnen
+  ctx.fillStyle = drawColour;
+  ctx.fillRect(leftX,topY,width,height);
+
+}
+
+
+function Kreis(centerX, centerY, radius, drawColour) { //Funktion um den Ball zu zeichen
+  ctx.fillStyle = drawColour;
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, radius, 0, Math.PI*2, true);
+  ctx.fill();
+}
+
+function Erstellung() { //Funktion welche die anderen Funktionen ausführt
+  Viereck(0,0,canvas.width,canvas.height,"black");
+  Viereck(0,SpielerLinks,5,100,"red");
+  Viereck(595,SpielerRechts,5,100,"red");
+  Kreis(ballXAchse,ballYAchse,10,"yellow");
+  if (Runde > 10) {
+  ctx.fillStyle = "yellow";
+} else {
+  ctx.fillStyle = "orange";
+}
+  ctx.font = "30px Arial";
+  ctx.fillText(Runde, 370, 30);
+  ctx.fillText("ROUND:", 230, 30);
+  ctx.fillText("The Pong Arena", 200, 310);
+  ctx.fillText(PunkteLinks, 100, 100);
+  ctx.fillText(PunkteRechts, 480, 100);
+
+}
+
+function calculateKoordinatenMaus(evt) { //Funktion zur Mausbewegung fuer Spieler 1
+  var rect = canvas.getBoundingClientRect();
+  var root = document.documentElement;
+  var MausXAchse = evt.clientX - rect.left - root.scrollLeft;
+  var MausYAchse = evt.clientY - rect.top - root.scrollTop;
+  return {
+    x:MausXAchse,
+    y:MausYAchse
+
+  };
+}
+
+
+</script>
+
+</html>
